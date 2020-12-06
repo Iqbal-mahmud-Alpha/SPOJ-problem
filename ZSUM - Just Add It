@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define lli long long
+#define ff first
+#define ss second
+#define pr pair<lli,lli>
+#define pb push_back
+#define gcd(a,b)    __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  10000007
+lli power(lli a,lli n)
+{
+    lli res=1;
+    while(n)
+    {
+        if(n%2)
+        {
+            res=((res%mod)*(a%mod))%mod;
+            n--;
+        }
+
+        else
+        {
+            a=((a%mod)*(a%mod))%mod;
+            n/=2;
+        }
+    }
+    return res;
+}
+int main()
+{
+    lli n,k,ans=0,a,b,c,d;
+    while(cin>>n>>k)
+    {
+        if(n==0&& k==0)break;
+        a=power(n,n)%mod;
+        b=power(n,k)%mod;
+        c=2*power((n-1),k)%mod;
+        d=2*power((n-1),(n-1))%mod;
+        ans=(a%mod+b%mod+c%mod+d%mod)%mod;
+        cout<<ans<<endl;
+    }
+
+}
