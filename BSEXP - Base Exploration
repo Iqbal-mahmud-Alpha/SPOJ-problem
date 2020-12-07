@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define lli long long int
+#define ff first
+#define ss second
+#define pr pair<lli,lli>
+#define pb push_back
+#define gcd(a,b)    __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 1000007
+vector<int>v;
+bool a[num];
+void sive()
+{
+    memset(a,true,sizeof(a));
+    a[0]=a[1]=false;
+    for(int i=4; i<num; i+=2)a[i]=false;
+    for(int i=3; i<sqrt(num); i+=2)
+    {
+        if(a[i])
+        {
+            for(int j=i*i; j<num; j+=i*2)
+            {
+                a[j]=false;
+            }
+        }
+    }
+    for(int i=0; i<num; i++)
+    {
+        if(a[i])v.push_back(i);
+    }
+}
+void solve()
+{
+    lli a,res=2,k=0;
+    cin>>a;
+    for(lli c:v)
+    {
+        if(c*c<=a)
+        {
+            if(a%c==0)
+            {
+                int cnt=0;
+                while(a%c==0)
+                {
+                    a/=c;
+                    cnt++;
+                }
+                if(cnt>k)
+                {
+                    res=c;
+                    k=cnt;
+                }
+
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+    if(a>1&&k<1){
+        res=a;
+    }
+    cout<<res<<endl;
+}
+int main()
+{
+    sive();
+    int tc;
+    cin>>tc;
+    while(tc--)
+    {
+        solve();
+    }
+}
