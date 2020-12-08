@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define lli long long int
+#define ff first
+#define ss second
+#define pr pair<lli,lli>
+#define pb push_back
+#define gcd(a,b)    __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 1000007
+lli f[1000007];
+lli p[1000007];
+lli sum[1000007];
+void phi()
+{
+    for(int i=1; i<=1000007; i++)
+    {
+        f[i]=i;
+    }
+    for(int i=2; i<=1000007; i++)
+    {
+        if(f[i]==i)
+        {
+            for(int j=i; j<=1000007; j+=i)
+            {
+                f[j]/=i;
+                f[j]*=(i-1);
+            }
+        }
+    }
+    //sive to use to 1 to n gcd  sum per index  and keep in p[j] index
+    for(int i=1; i<=1000007; i++)
+    {
+        for(int j=i; j<=1000007; j+=i)
+        {
+            p[j]+=(i*f[j/i]);
+        }
+    }
+    
+    //prefix sum to caltulate for(int i=1;i<n;i++)for(int j=1;j<=n;j++)
+    
+    for(int i=1; i<=1000007; i++)
+    {
+        sum[i]=sum[i-1]+p[i]-i;
+    }
+
+
+}
+int main()
+{
+    phi();
+    lli tc,n;
+    while(true){
+        cin>>n;
+        if(n==0)break;
+        cout<<sum[n]<<endl;
+    }
+}
