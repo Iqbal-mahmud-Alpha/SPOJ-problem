@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define lli long long int
+#define ff first
+#define ss second
+#define pr pair<lli,lli>
+#define pb push_back
+#define gcd(a,b)    __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 1000005
+vector<int>v;
+bool a[num];
+int b[num]= {0};
+void sive()
+{
+    memset(a,1,sizeof(a));
+    a[0]=a[1]=0;
+    for(int i=4; i<num; i+=2)a[i]=0;
+    for(int i=3; i<sqrt(num); i+=2)
+    {
+        if(a[i])
+        {
+            for(int j=i*i; j<num; j+=i*2)
+            {
+                a[j]=0;
+            }
+        }
+    }
+}
+bool digit(int n)
+{
+    int cnt=0,sum;
+    int number=n;
+    while(n!=0)
+    {
+        if(n%10==0)return false;
+        n/=10;
+        cnt++;
+    }
+    int d=pow(10,cnt-1);
+    while(number!=0)
+    {
+        number%=d;
+        d/=10;
+        if(a[number]==0 && number!=0) return false;
+    }
+    return true;
+
+}
+int main()
+{
+    sive();
+    for(int i=2; i<=num; i++)
+    {
+        if(a[i])
+        {
+            if(digit(i))
+            {
+                b[i]=1;
+            }
+        }
+    }
+//    for(int i=0; i<=100; i++)if(b[i])cout<<i<<" ";
+    for(int i=1; i<=num; i++)
+    {
+        b[i]=b[i-1]+b[i];
+    }
+    int tc,n;
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>n;
+        cout<<b[n]<<endl;
+    }
+}
