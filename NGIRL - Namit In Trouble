@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define lli long long int
+#define ff first
+#define ss second
+#define pr pair<lli,lli>
+#define pb push_back
+#define gcd(a,b)    __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 100000
+vector<lli>v;
+bool a[num];
+void sive()
+{
+    memset(a,true,sizeof(a));
+    a[0]=a[1]=false;
+    for(lli i=4; i<num; i+=2)a[i]=false;
+    for(lli i=3; i<sqrt(num); i+=2)
+    {
+        if(a[i])
+        {
+            for(lli j=i*i; j<num; j+=i*2)
+            {
+                a[j]=false;
+            }
+        }
+    }
+    for(lli i=0; i<num; i++)
+    {
+        if(a[i])v.pb(i*i);
+    }
+}
+int main()
+{
+    sive();
+    int tc,n,k;
+    cin>>tc;
+    while(tc--)
+    {
+        lli n,k;
+        cin>>n>>k;
+        auto it1=upper_bound(v.begin(),v.end(),n);
+        auto it2=upper_bound(v.begin(),v.end(),k);
+        int pos1=it1-v.begin();
+        int pos2=it2-v.begin();
+        if(v[pos1]==n){
+            pos1++;
+        }
+        if(v[pos2]==k){
+            pos2++;
+        }
+        if(k<n)cout<<pos1<<" "<<pos1-pos2<<endl;
+        else cout<<pos1<<" "<<0<<endl;
+    }
+}
