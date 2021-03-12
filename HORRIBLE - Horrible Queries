@@ -1,0 +1,106 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster  ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff first
+#define ss second
+#define pb push_back
+#define gcd(a, b) __gcd(a, b)
+#define lcm(a, b) (a * (b / gcd(a, b)))
+#define all(a) a.begin(), a.end()
+#define INF 1000000000
+#define mod 1000000007
+#define num 100005
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+ll a[num];
+struct al
+{
+    ll sum,prop;
+
+} tree[num*4];
+void built(ll node,ll b,ll e )
+{
+    if(b==e)
+    {
+        tree[node].sum=a[b];
+        return;
+    }
+    ll mid=(b+e)/2;
+    built(node*2,b,mid);
+    built(2*node+1,mid+1,e);
+    tree[node].sum=tree[node*2].sum+tree[2*node+1].sum;
+}
+void update(ll node,ll b,ll e,ll i,ll j,ll val)
+{
+    if(i>e or j<b)
+    {
+        return;
+    }
+    if(b>=i and e<=j)
+    {
+        tree[node].sum+=(e-b+1)*val;
+        tree[node].prop+=val;
+        return;
+    }
+    ll mid=(b+e)/2;
+    update(node*2,b,mid,i,j,val);
+    update(2*node+1,mid+1,e,i,j,val);
+    tree[node].sum=tree[node*2].sum+tree[2*node+1].sum+(e-b+1)*tree[node].prop;
+}
+ll  query(ll node,ll b,ll e,ll i,ll j,ll carry=0)
+{
+    if(i>e or j<b)
+    {
+        return 0;
+    }
+    if(b>=i and e<=j)
+    {
+        return tree[node].sum+carry*(e-b+1);
+    }
+    ll mid=(b+e)/2;
+    ll s1=query(node*2,b,mid,i,j,carry+tree[node].prop);
+    ll s2=query(2*node+1,mid+1,e,i,j,carry+tree[node].prop);
+    return s1+s2;
+}
+//void Print(int n)
+//{
+//    for(int i=1; i<=3*n; i++)
+//    {
+//        cout<<tree[i].sum<<' ';
+//    }
+//    cout<<endl;
+//    for(int i=1; i<=3*n; i++)
+//    {
+//        cout<<tree[i].prop<<' ';
+//    }
+//    cout<<endl;
+//}
+int main()
+{
+    ll tc,n,q,l,r,code,val;
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>n>>q;
+        memset(tree,0,sizeof(tree));
+        built(1,1,n);
+        while(q--)
+        {
+            cin>>code;
+            if(code==0)
+            {
+                cin>>l>>r>>val;
+                update(1,1,n,l,r,val);
+            }
+            else if(code==1)
+            {
+                cin>>l>>r;
+                cout<<query(1,1,n,l,r)<<endl;
+            }
+        }
+    }
+
+
+}
