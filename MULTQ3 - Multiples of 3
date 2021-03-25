@@ -1,0 +1,132 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster      ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff first
+#define ss second
+#define pb push_back
+ 
+#define fr0(i, n)      for(int i=0; i<n; i++)
+#define fr1(i, n)      for(int i=1; i<=n; i++
+ 
+#define mem(a,b)  memset(a,b,sizeof(a))
+#define gcd(a, b) __gcd(a, b)
+#define lcm(a, b) (a * (b / gcd(a, b)))
+#define all(a) a.begin(), a.end()
+#define setbit(n) __builtin_popcount(n);
+#define totalbit(n) log2(n)+1
+#define precision(x)      cout<<fixed<<setprecision(x)
+#define INF 1000000000
+#define mod 1000000007
+#define num 100005
+ 
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+ 
+ll a[num];
+struct al
+{
+    ll zero,one,two,prop;
+} tree[num*4];
+ 
+void build(int node, int b, int e)
+{
+    if(b==e)
+    {
+        tree[node].zero = 1;
+        return;
+    }
+ 
+    int mid = (b+e)/2;
+    int left = 2*node;
+    int right= left+1;
+ 
+    build(left, b, mid);
+    build(right, mid+1, e);
+ 
+    tree[node].zero = tree[left].zero + tree[right].zero;
+}
+void shift(int node)
+{
+    int x=tree[node].zero;
+    tree[node].zero=tree[node].two;
+    tree[node].two=tree[node].one;
+    tree[node].one=x;
+}
+void update(ll node,ll b,ll e,ll i,ll j,ll val=1)
+{
+    if(i>e or j<b)
+    {
+        return;
+    }
+    if(b>=i and e<=j)
+    {
+        tree[node].prop+=val;
+        shift(node);
+        return;
+    }
+    ll mid=(b+e)/2;
+    update(node*2,b,mid,i,j,val);
+    update(2*node+1,mid+1,e,i,j,val);
+ 
+    tree[node].zero=tree[node*2].zero+tree[2*node+1].zero;
+    tree[node].one=tree[node*2].one+tree[2*node+1].one;
+    tree[node].two=tree[node*2].two+tree[2*node+1].two;
+    int l=(tree[node].prop)%3;
+    for(int i=0; i<l; i++)shift(node);
+}
+ll  query(ll node,ll b,ll e,ll i,ll j,ll carry=0)
+{
+    if(i>e or j<b)
+    {
+        return 0;
+    }
+    if(b>=i and e<=j)
+    {
+        if((carry%3)==0) return tree[node].zero;
+        else if((carry%3)==1) return tree[node].two;
+        else if((carry%3)==2) return tree[node].one;
+    }
+    ll mid=(b+e)/2;
+    ll s1=query(node*2,b,mid,i,j,carry+tree[node].prop);
+    ll s2=query(2*node+1,mid+1,e,i,j,carry+tree[node].prop);
+    return s1+s2;
+}
+//void Print(int n)
+//{
+//    for(int i=1; i<=3*n; i++)
+//    {
+//        cout<<tree[i].sum[0]<<' '<<tree[i].sum[1]<<' '<<tree[i].sum[2]<<endl;
+//    }
+//    cout<<endl;
+//    for(int i=1; i<=3*n; i++)
+//    {
+//        cout<<tree[i].prop<<' ';
+//    }
+//    cout<<endl;
+//}
+int main()
+{
+    faster
+    ll tc,n,q,l,r,code,val;
+    cin>>n>>q;
+    build(1,1,n);
+    //Print(n);
+    while(q--)
+    {
+        cin>>code;
+        if(code==0)
+        {
+            cin>>l>>r;
+            update(1,1,n,l+1,r+1);
+            //Print(n);
+        }
+        else if(code==1)
+        {
+            cin>>l>>r;
+            cout<<query(1,1,n,l+1,r+1)<<endl;
+            //Print(n);
+        }
+    }
+ 
+}
