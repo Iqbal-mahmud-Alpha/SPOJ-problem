@@ -1,0 +1,111 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster            ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff                first
+#define ss                second
+#define pb                push_back
+#define pr                pair<ll,ll>
+#define mem(a,b)          memset(a,b,sizeof(a))
+#define gcd(a, b)         __gcd(a, b)
+#define lcm(a, b)         (a * (b / gcd(a, b)))
+#define all(a)            a.begin(), a.end()
+#define setbit(n)         __builtin_popcount(n);
+#define totalbit(n)       log2(n)+1
+#define lens(s)           s.size()
+#define lena(a)           sizeof(a)/sizeof(a[0])
+#define posation(x)       cout<<fixed<<setprecision(x)
+#define pi                3.141592653589793
+#define INF               1000000000
+#define mod               1000000007 //10^9+7;
+#define num               10005
+
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+vector<int>prime,grp[num];
+int vis[num],dis[num];
+
+bool isPrime(int n)
+{
+    if(n<2)return false;
+    if(n<=3)return true;
+    if(n%2==0)return false;
+    for(int i=3; i*i<=n; i+=2)
+    {
+        if(n%i==0)return false;
+    }
+    return true;
+}
+bool isvalid(int a,int b)
+{
+    int cnt=0;
+    while(a>0 and b>0)
+    {
+        if(a%10!=b%10)cnt++;
+        a/=10,b/=10;
+    }
+    if(cnt==1)return true;
+    else return false;
+}
+void builtgraph()
+{
+    for(int i=1000; i<=9999; i++)
+    {
+        if(isPrime(i))
+        {
+            prime.pb(i);
+        }
+    }
+    for(int i=0; i<prime.size(); i++)
+    {
+        for(int j=i+1; j<prime.size(); j++)
+        {
+            int a=prime[i];
+            int b=prime[j];
+            if(isvalid(a,b))
+            {
+                grp[a].pb(b);
+                grp[b].pb(a);
+            }
+        }
+    }
+}
+void bfs(int source)
+{
+    dis[source]=0;
+    vis[source]=1;
+    queue<int>q;
+    q.push(source);
+    while(!q.empty())
+    {
+        int node=q.front();
+        q.pop();
+        for(int child:grp[node])
+        {
+            if(vis[child]==0)
+            {
+                vis[child]=1;
+                dis[child]=dis[node]+1;
+                q.push(child);
+            }
+        }
+    }
+}
+int main()
+{
+    int tc,n,e,x,y;
+    builtgraph();
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>x>>y;
+        for(int i=1000; i<=9999; i++)dis[i]=-1,vis[i]=0;
+        bfs(x);
+        if(dis[y]==-1)
+        {
+            cout<<"Impossible"<<endl;
+        }
+        else cout<<dis[y]<<endl;
+    }
+}
