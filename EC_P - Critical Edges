@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster            ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff                first
+#define ss                second
+#define pb                push_back
+#define pr                pair<ll,ll>
+#define mem(a,b)          memset(a,b,sizeof(a))
+#define gcd(a, b)         __gcd(a, b)
+#define lcm(a, b)         (a * (b / gcd(a, b)))
+#define all(a)            a.begin(), a.end()
+#define setbit(n)         __builtin_popcount(n);
+#define totalbit(n)       log2(n)+1
+#define lens(s)           s.size()
+#define lena(a)           sizeof(a)/sizeof(a[0])
+#define posation(x)       cout<<fixed<<setprecision(x)
+#define pi                3.141592653589793
+#define INF               1000000000
+#define mod               1000000007 //10^9+7;
+#define num               1000005
+
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+vector<int>v[num];
+int vis[num],dis[num];
+map<int,int>m;
+void bfs(int source)
+{
+    queue<int>q;
+    vis[source]=1;
+    dis[source]=0;
+    q.push(source);
+    while(!q.empty())
+    {
+        int node=q.front();
+        q.pop();
+        for(int child:v[node])
+        {
+            if(vis[child]==0)
+            {
+                vis[child]=1;
+                dis[child]=dis[node]+1;
+                m[dis[child]]++;
+                q.push(child);
+            }
+        }
+    }
+
+}
+int main()
+{
+    faster
+    int tc,n,e,x,y,k,q;
+    cin>>n>>e;
+    for(int i=1; i<=e; i++)
+    {
+        cin>>x>>y;
+        x++,y++;
+        v[x].pb(y);
+        v[y].pb(x);
+    }
+    cin>>q;
+    while(q--)
+    {
+        mem(dis,0),mem(vis,0);
+        m.clear();
+        cin>>x>>y;
+        int ans=y;
+        x++,y++;
+        bfs(x);
+        cout<<m[ans]<<endl;
+    }
+
+}
